@@ -4,11 +4,46 @@
       defer
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
+    <link rel="stylesheet" href="style.css">
   </head>
-  <body>
-    <h1 x-data="{ message: 'I ❤️ Midi' }" x-text="message"></h1>
-    <pre id='chord'></pre>
-    <pre id='notes'></pre>
+  <body class="css-selector">
+    <div id='header'>
+      
+      <span id='night' onclick="switchTheme();">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+        </svg>
+      </span>
+      <a href="https://github.com/alelouis" id='info' target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </a>
+      <h1 id='title'>midiTeach</h1> 
+    </div>
+
+    <div id='main'>
+      <div id='score'>
+        <p style="display:inline" id='correct'>0</p> <h2 style="display:inline">-</h2>
+        <p style="display:inline" id='wrong'>0</p>
+      </div>
+      <p id='chord'></p>
+      <p id='notes'> </p>
+
+      <div id='time'>
+        <p style="display:inline">Last </p>
+        <p style="display:inline" id='lastTime'>0</p>
+        <p style="display:inline"> sec</p></br>
+
+        <p style="display:inline">Mean </p>
+        <p style="display:inline" id='meanTime'>0</p>
+        <p style="display:inline"> sec</p>
+      </div>
+    </div>
+    <div id='footer'>
+      <p style="display:inline" id='devices'></p>
+    </div>
   </body>
   <script src="script.js"></script>
+  <script src="switcher.js"></script>
 </html>

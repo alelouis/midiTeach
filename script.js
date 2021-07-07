@@ -88,17 +88,7 @@ class Miditeach {
   }
 
   checkNext() {
-    if (this.isIncorrect() || this.isCorrect()) {
-      this.totalChords += 1;
-      if (this.isCorrect()) {
-        console.log("Correct");
-        this.totalCorrect += 1;
-      } else {
-        console.log("Wrong");
-        this.totalIncorrect += 1;
-      }
-      this.sampleNextChord();
-    }
+    return (this.isIncorrect() || this.isCorrect())
   }
 
   playedNotesStr() {
@@ -108,7 +98,7 @@ class Miditeach {
         str.push(this.notes[index].replace("\n", "/"));
       }
     });
-    return str;
+    return str.join(' ');
   }
 
   updatePlayedNotes(midiData) {
@@ -120,21 +110,67 @@ class Miditeach {
       } else if (msgType == 128) {
         this.playedNotes[msgNote % 12] = 0;
       }
-      document.querySelector("#notes").innerText = this.playedNotesStr(
-        this.playedNotes
-      );
     }
   }
 }
 
 var miditeach = new Miditeach();
+var paused = false;
+var start = Date.now();
+var times = [];
 
+function loop(timestamp) {
+  var next = miditeach.checkNext() && !paused
+  document.querySelector("#notes").innerText = miditeach.playedNotesStr(
+    miditeach.playedNotes
+  );
+
+  if (next) {
+    var delta = Date.now() - start;
+    times.push(delta)
+    var mean = ((times.reduce((a, b) => a + b, 0)/ times.length) || 0)/1000;
+    document.querySelector("#lastTime").innerText = (delta/1000).toFixed(2);
+    document.querySelector("#meanTime").innerText = mean.toFixed(2)
+    if (miditeach.isCorrect()) {
+      document.querySelector("#chord").style.color = getComputedStyle(document.documentElement).getPropertyValue('--correct-color');
+      document.querySelector("#footer").style.background = getComputedStyle(document.documentElement).getPropertyValue('--correct-color');
+      miditeach.totalCorrect += 1;
+      document.querySelector("#correct").innerText = miditeach.totalCorrect
+    } else {
+      document.querySelector("#chord").style.color = getComputedStyle(document.documentElement).getPropertyValue('--wrong-color');
+      document.querySelector("#footer").style.background = getComputedStyle(document.documentElement).getPropertyValue('--wrong-color');
+      miditeach.totalIncorrect += 1;
+      document.querySelector("#wrong").innerText = miditeach.totalIncorrect
+    }
+    console.log('paused.');
+    paused = true
+    setTimeout(function () {
+      console.log('unpaused');
+      paused = false;
+      miditeach.sampleNextChord();
+      start = Date.now();
+      document.querySelector("#chord").style.color = document.querySelector("#footer").style.getPropertyValue('--primary-color');
+      document.querySelector("#footer").style.background = document.querySelector("#footer").style.getPropertyValue('--secondary-color');
+    }, 1000);
+  } 
+  window.requestAnimationFrame(loop)
+}
+
+
+var devices = [];
 navigator.requestMIDIAccess().then((access) => {
   const inputs = access.inputs;
+  
+  access.inputs.forEach(function (input) {
+    devices.push(input.name);
+  });
+  document.querySelector("#devices").innerText = devices;
+
   inputs.forEach((midiInput) => {
     midiInput.onmidimessage = function (message) {
       miditeach.updatePlayedNotes(message.data);
-      miditeach.checkNext();
     };
   });
 });
+
+window.requestAnimationFrame(loop)
