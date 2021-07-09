@@ -4,6 +4,8 @@ class Miditeach {
     this.totalChords = 0;
     this.totalCorrect = 0;
     this.totalIncorrect = 0;
+    this.times = [];
+    this.start = Date.now();
     this.notes = [
       "C",
       "C#\nDb",
@@ -168,24 +170,35 @@ class Miditeach {
     document.querySelector("#select_" + e).style.opacity =
       0.2 + this.formulaSelected[e] * 0.8;
   }
+
+  reset() {
+    this.totalChords = 0;
+    this.totalCorrect = 0;
+    this.totalIncorrect = 0;
+    this.times = [];
+    this.start = Date.now()
+    this.sampleNextChord()
+    document.querySelector("#lastTime").innerText = 0;
+    document.querySelector("#meanTime").innerText = 0;
+    document.querySelector("#correct").innerText = miditeach.totalCorrect;
+    document.querySelector("#wrong").innerText = miditeach.totalIncorrect;
+  }
 }
 
 var miditeach = new Miditeach();
 var paused = false;
-var start = Date.now();
-var times = [];
 var devices = [];
 
-function loop(timestamp) {
+function loop() {
   var next = miditeach.checkNext() && !paused;
   document.querySelector("#notes").innerText = miditeach.playedNotesStr(
     miditeach.playedNotes
   );
 
   if (next) {
-    var delta = Date.now() - start;
-    times.push(delta);
-    var mean = (times.reduce((a, b) => a + b, 0) / times.length || 0) / 1000;
+    var delta = Date.now() - miditeach.start;
+    miditeach.times.push(delta);
+    var mean = (miditeach.times.reduce((a, b) => a + b, 0) / miditeach.times.length || 0) / 1000;
     document.querySelector("#lastTime").innerText = (delta / 1000).toFixed(2);
     document.querySelector("#meanTime").innerText = mean.toFixed(2);
     if (miditeach.isCorrect()) {
@@ -213,7 +226,7 @@ function loop(timestamp) {
       console.log("unpaused");
       paused = false;
       miditeach.sampleNextChord();
-      start = Date.now();
+      miditeach.start = Date.now();
       document.querySelector("#chord").style.color = document
         .querySelector("#footer")
         .style.getPropertyValue("--primary-color");
@@ -233,7 +246,7 @@ navigator.requestMIDIAccess().then((access) => {
     devices.push(input.name);
   });
   document.querySelector("#devices").innerText =
-    "Deviced detected : " + devices.join(", ");
+    "Devices detected : " + devices.join(", ");
 
   inputs.forEach((midiInput) => {
     midiInput.onmidimessage = function (message) {
