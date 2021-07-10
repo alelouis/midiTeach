@@ -27,7 +27,7 @@ body {
   font-family: Roboto;
   width: 50%;
   margin: auto;
-  padding-top: 14%;
+  padding-top: 2em;
   color: var(--primary-color);
 }
 
@@ -80,14 +80,10 @@ body {
 }
 
 #header {
-  position: fixed;
-  left: 0;
-  top: 0%;
   width: 100%;
   color: var(--primary-color);
   padding-top: 10px;
   margin: 0px;
-  display: inline;
   background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -144,11 +140,11 @@ body {
 
 #selector {
   text-align: center;
-
   margin: auto;
   margin-bottom: 2em;
-  width: 50%;
+  width: 100%;
   min-width: 150px;
+  max-width: 20em;
 }
 
 #time {
