@@ -1,9 +1,5 @@
 <html>
   <head>
-    <script
-      defer
-      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
-    ></script>
     <link rel="stylesheet" href="style.css">
   </head>
   <body class="css-selector">
@@ -19,10 +15,9 @@
           <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
         </svg>
       </a>
-      <h1 id='title'>midiTeach</h1> 
+      <h1 id='title'>midiTeach 1.0</h1> 
 
     </div>
-
     <div id='main'>
       <div id='selector'>
         <div class='chordSelector' id="select_maj" onclick="miditeach.selectChord('maj')">maj</div>
@@ -57,28 +52,22 @@
             <rect id="note11" x="277.5" width="35" height="140" rx="15" stroke-width=8 style="fill:var(--gray-color);stroke:var(--background-color)"/>
         </svg>
       </div>
-
       <div id='time'>
         <span>Last </span>
         <span id='lastTime'>0</span>
         <span> sec</span></br>
-
         <span>Mean </span>
         <span id='meanTime'>0</span>
         <span> sec</span></br></br>
         <div id='reset' onclick="miditeach.reset()"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
         </svg></div>
-        
       </div>
-      
     </div>
-    
-    
     <div id='footer'>
       <p style="display:inline" id='devices'></p>
     </div>
   </body>
-  <script src="script.js"></script>
+  <script src="miditeach-1.0.js"></script>
   <script src="switcher.js"></script>
 </html>

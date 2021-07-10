@@ -70,10 +70,12 @@ class Miditeach {
   }
 
   randChoice(array) {
+     // Returns an array element randomly
     return array[Math.floor(Math.random() * array.length)];
   }
 
   sampleNextChord() {
+    // Samples a new chord from availables ones
     this.playedNotes = new Array(12).fill(0);
 
     this.formulaName = this.randChoice(
@@ -99,6 +101,7 @@ class Miditeach {
   }
 
   isIncorrect() {
+    // Checks if the given midi inputs are incorrect for active chord
     var correctNotes = 0;
     var incorrectNotes = 0;
     for (let i = 0; i < 12; i++) {
@@ -113,6 +116,7 @@ class Miditeach {
   }
 
   isCorrect() {
+    // Checks if the given midi inputs are correct for active chord
     var correctNotes = 0;
     for (let i = 0; i < 12; i++) {
       correctNotes += this.expectedNotes[i] && this.playedNotes[i];
@@ -122,10 +126,12 @@ class Miditeach {
   }
 
   checkNext() {
+    // Checks for success or error
     return this.isIncorrect() || this.isCorrect();
   }
 
   playedNotesStr() {
+    // Format the notes for display
     var str = [];
     this.playedNotes.forEach((element, index) => {
       if (element > 0) {
@@ -135,7 +141,29 @@ class Miditeach {
     return str.join(" ");
   }
 
+  updatePiano() {
+    // Update piano display with pressed notes
+    for (let index = 1; index <= 12; index++) {
+      if (this.playedNotes[index - 1]) {
+        document
+          .getElementById("note" + index)
+          .setAttribute(
+            "style",
+            "fill:var(--primary-color);stroke:var(--background-color)"
+          );
+      } else {
+        document
+          .getElementById("note" + index)
+          .setAttribute(
+            "style",
+            "fill:var(--gray-color);stroke:var(--background-color)"
+          );
+      }
+    }
+  }
+
   updatePlayedNotes(midiData) {
+    // Update game logic from midi inputs
     if (!this.paused) {
       var msgType = midiData[0];
       var msgNote = midiData[1];
@@ -144,27 +172,12 @@ class Miditeach {
       } else if (msgType == 128) {
         this.playedNotes[msgNote % 12] = 0;
       }
-      for (let index = 1; index <= 12; index++) {
-        if (this.playedNotes[index - 1]) {
-          document
-            .getElementById("note" + index)
-            .setAttribute(
-              "style",
-              "fill:var(--primary-color);stroke:var(--background-color)"
-            );
-        } else {
-          document
-            .getElementById("note" + index)
-            .setAttribute(
-              "style",
-              "fill:var(--gray-color);stroke:var(--background-color)"
-            );
-        }
-      }
+      this.updatePiano()
     }
   }
 
   selectChord(e) {
+    // Chord selection callback
     this.formulaSelected[e] = !this.formulaSelected[e];
     console.log(20 + this.formulaSelected[e] * 80);
     document.querySelector("#select_" + e).style.opacity =
@@ -172,6 +185,7 @@ class Miditeach {
   }
 
   reset() {
+    // Reset statistics
     this.totalChords = 0;
     this.totalCorrect = 0;
     this.totalIncorrect = 0;
@@ -190,17 +204,23 @@ var paused = false;
 var devices = [];
 
 function loop() {
+  // Main game loop
   var next = miditeach.checkNext() && !paused;
   document.querySelector("#notes").innerText = miditeach.playedNotesStr(
     miditeach.playedNotes
   );
 
+  // On success or error
   if (next) {
+
+    // Update time stats
     var delta = Date.now() - miditeach.start;
     miditeach.times.push(delta);
     var mean = (miditeach.times.reduce((a, b) => a + b, 0) / miditeach.times.length || 0) / 1000;
     document.querySelector("#lastTime").innerText = (delta / 1000).toFixed(2);
     document.querySelector("#meanTime").innerText = mean.toFixed(2);
+
+    // Update colors
     if (miditeach.isCorrect()) {
       document.querySelector("#chord").style.color = getComputedStyle(
         document.documentElement
@@ -220,10 +240,10 @@ function loop() {
       miditeach.totalIncorrect += 1;
       document.querySelector("#wrong").innerText = miditeach.totalIncorrect;
     }
-    console.log("paused.");
+
+    // Add delay of 1 sec before next chord
     paused = true;
     setTimeout(function () {
-      console.log("unpaused");
       paused = false;
       miditeach.sampleNextChord();
       miditeach.start = Date.now();
@@ -238,16 +258,18 @@ function loop() {
   window.requestAnimationFrame(loop);
 }
 
-
+// MIDI inputs
 navigator.requestMIDIAccess().then((access) => {
   const inputs = access.inputs;
-
+  
+  // Showing devices
   access.inputs.forEach(function (input) {
     devices.push(input.name);
   });
   document.querySelector("#devices").innerText =
     "Devices detected : " + devices.join(", ");
 
+  // Callback on played notes
   inputs.forEach((midiInput) => {
     midiInput.onmidimessage = function (message) {
       miditeach.updatePlayedNotes(message.data);

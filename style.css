@@ -122,14 +122,13 @@ body {
 
 #reset {
     border-radius: 20px;
-    min-width: 3em;
-    min-height: 1.4em;
     line-height: 150%;
     display: inline-block;
     text-align: center;
     color: var(--primary-color);
     cursor: pointer;
     margin: auto;
+    width: 3em;
     font-size: 0.8em;
     opacity: 100%;
     transition: color 0.2s ease-in-out;
