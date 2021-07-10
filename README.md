@@ -1,7 +1,8 @@
-# miditeach
-**miditeach** is a music learning tool that can be used to practice your chords skills with a midi keyboard 🎹 !
+# midiTeach
+**midiTeach** is a music learning tool that can be used to practice your chords skills with a midi keyboard 🎹 !
 
 ## Features
+**V1.0**
 - Realtime midi input
 - Note visualization with mini-keyboard
 - Multiple chord quality selection : Minor, Major, Augmented, Diminished, Minor 7th, Major 7th, Dominant 7th and mM-7th
