@@ -10,7 +10,7 @@
 
 
 ## How do I use it ?
-[https://alelouis.eu/miditeachbeta/](https://alelouis.eu/miditeachbeta/)  
+[https://miditeach.alelouis.eu/](https://miditeach.alelouis.eu/)  
 *Only works under Google Chrome (RequestMIDI API).*
 
 ## Video demo
